@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Mostafax\PaymentEngine\Drivers;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use Mostafax\PaymentEngine\Contracts\PaymentDriverInterface;
 use Mostafax\PaymentEngine\Exceptions\GatewayException;
 
@@ -49,7 +49,7 @@ abstract class AbstractPaymentDriver implements PaymentDriverInterface
             $response = $this->http->request($method, $url, $options);
             $body     = $response->getBody()->getContents();
             return json_decode($body, associative: true) ?? [];
-        } catch (RequestException $e) {
+        } catch (GuzzleException $e) {
             throw new GatewayException(
                 "Gateway [{$this->getGatewayName()}] HTTP error: " . $e->getMessage(),
                 previous: $e,

@@ -66,7 +66,7 @@ final class MyFatoorahDriver extends AbstractPaymentDriver
         );
 
         $data     = $response['Data']['InvoiceTransactions'][0] ?? [];
-        $captured = strtoupper((string) ($data['TransactionStatus'] ?? '')) === 'SUCCSS';
+        $captured = strtoupper((string) ($data['TransactionStatus'] ?? '')) === 'SUCCESS';
 
         return new GatewayResponseDTO(
             success:               $captured,
@@ -90,7 +90,7 @@ final class MyFatoorahDriver extends AbstractPaymentDriver
         );
 
         $data     = $response['Data']['InvoiceTransactions'][0] ?? [];
-        $captured = strtoupper((string) ($data['TransactionStatus'] ?? '')) === 'SUCCSS';
+        $captured = strtoupper((string) ($data['TransactionStatus'] ?? '')) === 'SUCCESS';
 
         return new GatewayResponseDTO(
             success:       $captured,

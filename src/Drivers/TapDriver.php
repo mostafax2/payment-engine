@@ -84,8 +84,9 @@ final class TapDriver extends AbstractPaymentDriver
     public function fetchTransactions(string $from, string $to, int $page = 1, int $perPage = 500): array
     {
         $response = $this->get($this->cfg('base_url') . '/charges', [
-            'starting_after' => null,
-            'limit'          => $perPage,
+            'period[date][from]' => $from,
+            'period[date][to]'   => $to,
+            'limit'              => $perPage,
         ], [
             'Authorization' => 'Bearer ' . $this->cfg('secret_key'),
         ]);

@@ -12,7 +12,7 @@ final class InstallCommand extends Command
     protected $signature   = 'payment:install {--force : Overwrite existing published config}';
     protected $description = 'Install Payment Engine — publish config, run migrations, configure CSRF exclusions';
 
-    private const CSRF_LABEL = self::CSRF_LABEL;
+    private const CSRF_LABEL = 'CSRF exclusions';
 
     public function handle(): int
     {

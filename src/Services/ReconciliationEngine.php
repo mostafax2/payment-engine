@@ -58,7 +58,7 @@ final class ReconciliationEngine implements ReconciliationInterface
     // Core reconciliation logic
     // -----------------------------------------------------------------------
 
-    private function reconcile(string $gateway, string $from, string $to, ReconciliationReport $report): ReconciliationResultDTO
+    private function reconcile(string $gateway, string $from, string $to, ?ReconciliationReport $report): ReconciliationResultDTO
     {
         // 1. Fetch internal transactions
         $internal = $this->txRepo->forReconciliation($gateway, $from, $to);
@@ -136,8 +136,10 @@ final class ReconciliationEngine implements ReconciliationInterface
             }
         }
 
-        // 4. Persist items
-        $this->persistItems($report, $missingInInternal, $amountMismatches, $statusMismatches, $missingInGateway);
+        // 4. Persist items — only when called from run() with a saved report
+        if ($report !== null) {
+            $this->persistItems($report, $missingInInternal, $amountMismatches, $statusMismatches, $missingInGateway);
+        }
 
         return new ReconciliationResultDTO(
             gateway:             $gateway,
@@ -175,7 +177,7 @@ final class ReconciliationEngine implements ReconciliationInterface
 
     public function detectMismatches(string $gateway, string $from, string $to): array
     {
-        $result = $this->reconcile($gateway, $from, $to, new ReconciliationReport());
+        $result = $this->reconcile($gateway, $from, $to, null);
         return $result->mismatchItems;
     }
 

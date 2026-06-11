@@ -46,6 +46,7 @@ final class WebhookProcessor implements WebhookHandlerInterface
         // Production: validate HMAC against gateway's secret.
         return match ($gateway) {
             'stripe' => $this->verifyStripeSignature($request),
+            'fawry'  => $this->verifyFawrySignature($request),
             default  => true,
         };
     }
@@ -63,6 +64,7 @@ final class WebhookProcessor implements WebhookHandlerInterface
             'stripe'     => $payload['id'] ?? '',
             'paytabs'    => $payload['tran_ref'] ?? '',
             'paypal'     => $payload['resource']['id'] ?? '',
+            'fawry'      => ($payload['merchantRefNum'] ?? '') . ($payload['referenceNumber'] ?? ''),
             default      => json_encode($payload),
         };
 
@@ -112,6 +114,33 @@ final class WebhookProcessor implements WebhookHandlerInterface
     // -----------------------------------------------------------------------
     // Private
     // -----------------------------------------------------------------------
+
+    private function verifyFawrySignature(Request $request): bool
+    {
+        if (! config('payment-engine.gateways.fawry.verify_signature', true)) {
+            return true;
+        }
+
+        $merchantCode = (string) config('payment-engine.gateways.fawry.merchant_code', '');
+        $secureKey    = (string) config('payment-engine.gateways.fawry.secure_key', '');
+        $payload      = $request->all();
+        $received     = strtolower((string) ($payload['messageSignature'] ?? ''));
+
+        if ($received === '') {
+            return false;
+        }
+
+        $expected = md5(
+            $merchantCode
+            . ($payload['merchantRefNum'] ?? '')
+            . number_format((float) ($payload['paymentAmount'] ?? 0), 2, '.', '')
+            . ($payload['orderStatus'] ?? $payload['paymentStatus'] ?? '')
+            . ($payload['referenceNumber'] ?? '')
+            . $secureKey,
+        );
+
+        return hash_equals($expected, $received);
+    }
 
     private function verifyStripeSignature(Request $request): bool
     {

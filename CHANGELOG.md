@@ -4,6 +4,19 @@ All notable changes adhere to [Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [2.1.1] — 2026-06-11
+
+### Fixed
+
+- **InstallCommand**: `CSRF_LABEL` constant had a self-referential definition causing a fatal PHP error on boot
+- **MyFatoorahDriver**: `'SUCCSS'` typo in `handleCallback()` and `inquire()` caused all MyFatoorah payments to return `Failed` regardless of actual status
+- **ReconciliationEngine**: `detectMismatches()` passed an unsaved `ReconciliationReport` (id=null) to `reconcile()`, which called `persistItems()` and triggered a null FK constraint violation — fixed by passing `null` and guarding `persistItems()` with a null check
+- **WebhookProcessor**: Added `'fawry'` case to `idempotencyKey()` (was falling through to `json_encode($payload)`, producing unstable keys); added `verifyFawrySignature()` using same MD5 algorithm as `FawryDriver`
+- **TapDriver**: `fetchTransactions()` ignored `$from`/`$to` and passed `starting_after => null` — replaced with `period[date][from]`/`period[date][to]` params
+- **AbstractPaymentDriver**: Only caught `RequestException`; now catches `GuzzleException` (parent interface) to also handle connect timeouts, redirect loops, etc.
+
+---
+
 ## [2.1.0] — 2026-06-11
 
 ### Added
