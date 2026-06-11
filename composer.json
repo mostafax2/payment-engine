@@ -1,34 +1,68 @@
 {
-    "name": "mostafax/knet",
-    "description": "knet payment service",
-    "type": "laravel-package",
+    "name": "mostafax/payment-engine",
+    "description": "Enterprise Payment Orchestration, Reconciliation, Recovery and Monitoring Platform for Laravel — Multi-gateway (KNET, MyFatoorah, Tap, PayTabs, Stripe, PayPal), Transaction Ledger, Webhook Reliability, Auto-Recovery, Backfill Engine",
+    "version": "2.0.0",
+    "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Mostafax\\Knet\\": "src/" 
-        }
-    },
+    "keywords": [
+        "laravel", "payment", "payment-gateway", "knet", "myfatoorah",
+        "tap", "stripe", "paypal", "reconciliation", "webhook",
+        "fintech", "enterprise", "payment-orchestration", "transaction-ledger", "multi-tenant"
+    ],
+    "homepage": "https://github.com/mostafax2/payment-engine",
     "authors": [
         {
-            "name": "mostafa-elbayyar",
-            "email": "mostafa.m.elbiar@gmail.com"
+            "name": "Mostafa Elbayyar",
+            "email": "mostafa.m.elbiar2@gmail.com",
+            "role": "Principal Architect & Author"
         }
     ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/database": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/queue": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/events": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/bus": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/cache": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/routing": "^10.0|^11.0|^12.0|^13.0",
+        "illuminate/notifications": "^10.0|^11.0|^12.0|^13.0",
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpstan/phpstan": "^1.10",
+        "laravel/pint": "^1.0",
+        "mockery/mockery": "^1.6",
+        "fakerphp/faker": "^1.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mostafax\\PaymentEngine\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mostafax\\PaymentEngine\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
-                "Mostafax\\Knet\\KnetServiceProvider"
+                "Mostafax\\PaymentEngine\\PaymentEngineServiceProvider"
             ],
-            "migrations": [
-                "database/migrations"
-            ]
+            "aliases": {
+                "PaymentEngine": "Mostafax\\PaymentEngine\\Facades\\PaymentEngine"
+            }
         }
     },
-    "scripts": {
-        "post-package-install": [
-            "php artisan vendor:publish --tag=laravel-payment --ansi --force"
-        ]
+    "config": {
+        "sort-packages": true
     },
-    "minimum-stability": "stable",
-    "require": {}
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

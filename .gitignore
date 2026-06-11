@@ -1,1 +1,5 @@
-Knet2.php
+vendor/
+.env
+.phpunit.result.cache
+coverage/
+*.log
