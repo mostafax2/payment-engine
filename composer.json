@@ -1,12 +1,12 @@
 {
     "name": "mostafax/payment-engine",
-    "description": "Enterprise Payment Orchestration, Reconciliation, Recovery and Monitoring Platform for Laravel — Multi-gateway (KNET, MyFatoorah, Tap, PayTabs, Stripe, PayPal), Transaction Ledger, Webhook Reliability, Auto-Recovery, Backfill Engine",
-    "version": "2.0.0",
+    "description": "Enterprise Payment Orchestration, Reconciliation, Recovery and Monitoring Platform for Laravel — Multi-gateway (KNET, MyFatoorah, Tap, PayTabs, Stripe, PayPal, Fawry), Transaction Ledger, Webhook Reliability, Auto-Recovery, Backfill Engine",
+    "version": "2.1.0",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "laravel", "payment", "payment-gateway", "knet", "myfatoorah",
-        "tap", "stripe", "paypal", "reconciliation", "webhook",
+        "tap", "stripe", "paypal", "fawry", "egypt", "reconciliation", "webhook",
         "fintech", "enterprise", "payment-orchestration", "transaction-ledger", "multi-tenant"
     ],
     "homepage": "https://github.com/mostafax2/payment-engine",

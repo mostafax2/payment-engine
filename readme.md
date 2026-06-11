@@ -2,7 +2,7 @@
 
 > **Enterprise Payment Orchestration, Reconciliation, Recovery & Monitoring Platform for Laravel**
 
-[![Latest Version](https://img.shields.io/badge/version-2.0.0-brightgreen.svg)](https://github.com/mostafax2/payment-engine/releases)
+[![Latest Version](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/mostafax2/payment-engine/releases)
 [![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://www.php.net)
 [![Laravel Version](https://img.shields.io/badge/Laravel-10%2B-red.svg)](https://laravel.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
@@ -11,7 +11,7 @@
 
 ## Overview
 
-`mostafax/payment-engine` transforms any Laravel application into a full payment orchestration platform. It provides a unified driver interface across **6 payment gateways**, an immutable transaction ledger, a webhook reliability layer with Dead Letter Queue, automated reconciliation, stale-transaction recovery, and historical backfill — all event-driven and multi-tenant ready.
+`mostafax/payment-engine` transforms any Laravel application into a full payment orchestration platform. It provides a unified driver interface across **7 payment gateways**, an immutable transaction ledger, a webhook reliability layer with Dead Letter Queue, automated reconciliation, stale-transaction recovery, and historical backfill — all event-driven and multi-tenant ready.
 
 **Author:** [Mostafa Elbayyar](https://github.com/mostafax2)  
 **Documentation:** [https://mostafax2.github.io/payment-engine/](https://mostafax2.github.io/payment-engine/)  

@@ -4,6 +4,32 @@ All notable changes adhere to [Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [2.1.0] — 2026-06-11
+
+### Added
+
+#### Fawry Payment Gateway (Egypt)
+- **FawryDriver** — full integration with Fawry hosted payment API v2
+  - `initiate()`: SHA-256 charge signature, hosted redirect + Fawry outlet reference
+  - `handleCallback()`: MD5 callback signature verification, maps `PAID` → `Captured`
+  - `inquire()`: `GET /status/v2` with SHA-256 signature, live status check
+  - `fetchTransactions()`: returns `[]` (Fawry has no batch-fetch endpoint)
+  - Supports both card payment (redirect) and cash at Fawry outlets
+- `GatewayType::Fawry` enum case
+- `config/payment-engine.php`: `fawry` gateway block with `merchant_code`, `secure_key`, `return_url`, `verify_signature`
+- `InstallCommand`: Fawry `.env` stubs appended on `payment:install`
+
+#### Developer Experience
+- `payment:install` command for zero-config setup (publish config, migrate, patch CSRF, append `.env`)
+- GitHub Pages documentation with bilingual EN/AR toggle
+
+### Changed
+- `composer.json` version bumped to `2.1.0`
+- `composer.json` description and keywords updated to include Fawry/Egypt
+- Documentation updated: 7 gateways stat, Fawry card added to gateway grid
+
+---
+
 ## [2.0.0] — 2026-06-11 🚀 Complete Architecture Rebuild
 
 > **Breaking Change**: Package renamed from `mostafax/knet` to `mostafax/payment-engine`.

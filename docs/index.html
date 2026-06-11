@@ -231,7 +231,7 @@
 
 <!-- ══════════════════════ HERO ══════════════════════ -->
 <div class="hero">
-  <div class="hero-badge" data-en="⚡ v2.0.0 — Enterprise Edition" data-ar="⚡ الإصدار 2.0.0 — نسخة المؤسسات">⚡ v2.0.0 — Enterprise Edition</div>
+  <div class="hero-badge" data-en="⚡ v2.1.0 — Now with Fawry" data-ar="⚡ الإصدار 2.1.0 — يدعم الآن Fawry">⚡ v2.1.0 — Now with Fawry</div>
   <h1>
     <span data-en="Enterprise Payment" data-ar="منصة الدفع">Enterprise Payment</span><br>
     <span data-en="Orchestration Platform" data-ar="المؤسسية المتكاملة" style="background:linear-gradient(135deg,#34d399,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Orchestration Platform</span>
@@ -252,7 +252,7 @@
   <div class="stat"><div class="stat-num">6</div><div class="stat-label" data-en="Laravel Events" data-ar="أحداث Laravel">Laravel Events</div></div>
   <div class="stat"><div class="stat-num">10+</div><div class="stat-label" data-en="API Endpoints" data-ar="نقاط API">API Endpoints</div></div>
   <div class="stat"><div class="stat-num">5x</div><div class="stat-label" data-en="Webhook Retry Tiers" data-ar="مستويات إعادة المحاولة">Webhook Retry Tiers</div></div>
-  <div class="stat"><div class="stat-num">v2.0</div><div class="stat-label" data-en="Current Version" data-ar="الإصدار الحالي">Current Version</div></div>
+  <div class="stat"><div class="stat-num">v2.1</div><div class="stat-label" data-en="Current Version" data-ar="الإصدار الحالي">Current Version</div></div>
 </div>
 
 <!-- ══════════════════════ GATEWAYS ══════════════════════ -->
@@ -833,13 +833,22 @@ php artisan payment:install</pre>
       <div class="step-content">
         <h4 data-en="Fill Gateway Credentials in .env" data-ar="أضف بيانات اعتماد البوابة في .env">Fill Gateway Credentials in .env</h4>
         <p data-en="The install command appends stubs to .env — just fill in your real credentials." data-ar="أمر التثبيت يُضيف نماذج لـ .env تلقائياً — فقط أضف بيانات الاعتماد الحقيقية.">The install command appends stubs to <code>.env</code> — just fill in your real credentials.</p>
-        <pre>PAYMENT_GATEWAY=knet
+        <pre><span class="comment"># Default gateway</span>
+PAYMENT_GATEWAY=knet
+
+<span class="comment"># KNET (Kuwait)</span>
 KNET_TRANSPORT_ID=your_transport_id
 KNET_TRANSPORT_PASSWORD=your_password
 KNET_RESOURCE_KEY=your_resource_key
 KNET_SUCCESS_URL=https://yourapp.com/payment/knet/success
 KNET_ERROR_URL=https://yourapp.com/payment/knet/error
-KNET_SANDBOX=true</pre>
+KNET_SANDBOX=true
+
+<span class="comment"># Fawry (Egypt)</span>
+FAWRY_MERCHANT_CODE=your_merchant_code
+FAWRY_SECURE_KEY=your_secure_key
+FAWRY_RETURN_URL=https://yourapp.com/payment/fawry/success
+FAWRY_SANDBOX=true</pre>
       </div>
     </div>
     <div class="install-step">
