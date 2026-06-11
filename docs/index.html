@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Payment Engine — Enterprise Payment Orchestration, Reconciliation, Recovery & Monitoring Platform for Laravel.">
+  <title>Payment Engine — Enterprise Laravel Payment Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #10b981; --brand-dark: #059669; --brand-light: #6ee7b7;
+      --accent: #3b82f6; --accent2: #8b5cf6;
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b;
+      --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --info: #3b82f6;
+      --border: #334155; --radius: 12px;
+      --font-en: 'Inter', system-ui, sans-serif;
+      --font-ar: 'Cairo', 'Segoe UI', system-ui, sans-serif;
+      --font: var(--font-en);
+    }
+    [lang="ar"] { --font: var(--font-ar); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.7; }
+    a { color: var(--brand); text-decoration: none; } a:hover { opacity: .8; }
+
+    /* ── Lang Toggle ── */
+    .lang-toggle {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+      padding: 4px; cursor: pointer; font-size: 12px; font-weight: 600;
+    }
+    .lang-opt {
+      padding: 4px 10px; border-radius: 6px; color: var(--text3); transition: all .15s; user-select: none; cursor: pointer;
+      background: none; border: none; font-family: var(--font); font-size: 12px; font-weight: 600;
+    }
+    .lang-opt.active { background: var(--brand); color: white; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,23,42,.95); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px; gap: 16px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; flex-shrink: 0; }
+    .nav-brand .logo { width: 34px; height: 34px; background: linear-gradient(135deg,#10b981,#3b82f6); border-radius: 8px; display:flex;align-items:center;justify-content:center;font-size:18px; }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; color: var(--text2); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { display: flex; gap: 10px; align-items: center; }
+    .btn-nav { padding: 7px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; }
+    .btn-ghost { border: 1px solid var(--border); color: var(--text2); }
+    .btn-primary { background: var(--brand); color: white; }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center; padding: 110px 20px 80px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16,185,129,.1) 0%, transparent 70%);
+    }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 9999px; background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); color: var(--brand-light); font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(36px,6vw,74px); font-weight: 900; line-height: 1.08; letter-spacing: -.03em; margin-bottom: 24px; }
+    .hero h1 span { background: linear-gradient(135deg, #34d399, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: clamp(16px,2vw,20px); color: var(--text2); max-width: 660px; margin: 0 auto 40px; }
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-hero-primary { padding: 14px 28px; background: var(--brand); color: white; border-radius: var(--radius); font-weight: 700; font-size: 16px; }
+    .btn-hero-secondary { padding: 14px 28px; border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); font-weight: 600; font-size: 16px; }
+
+    /* ── Stats ── */
+    .stats { display: flex; justify-content: center; gap: 64px; flex-wrap: wrap; padding: 48px 20px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stat { text-align: center; }
+    .stat-num  { font-size: 36px; font-weight: 900; color: var(--brand); }
+    .stat-label { font-size: 14px; color: var(--text2); }
+
+    /* ── Sections ── */
+    section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+    .section-badge { display: inline-block; padding: 4px 12px; border-radius: 6px; background: rgba(16,185,129,.1); color: var(--brand-light); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+    .section-title { font-size: clamp(28px,4vw,44px); font-weight: 800; margin-bottom: 16px; }
+    .section-sub { font-size: 18px; color: var(--text2); max-width: 620px; }
+
+    /* ── Gateway Grid ── */
+    .gateway-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; margin-top: 48px; }
+    .gateway-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; text-align: center; transition: all .2s; }
+    .gateway-card:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,.12); }
+    .gateway-icon { font-size: 40px; margin-bottom: 12px; }
+    .gateway-name { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .gateway-region { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
+    .badge-live  { display:inline-block;padding:2px 8px;border-radius:9999px;font-size:11px;font-weight:600;background:rgba(16,185,129,.15);color:var(--success); }
+
+    /* ── Features Grid ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 20px; margin-top: 48px; }
+    .feature-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: border-color .2s; }
+    .feature-card:hover { border-color: var(--brand); }
+    .feature-icon { font-size: 32px; margin-bottom: 16px; }
+    .feature-title { font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--text2); line-height: 1.6; }
+    .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--bg3); color: var(--text2); }
+
+    /* ── Code ── */
+    .code-section { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 48px; }
+    .code-tabs { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .code-tab { padding: 12px 20px; font-size: 13px; font-weight: 500; color: var(--text3); cursor: pointer; white-space: nowrap; border: none; border-bottom: 2px solid transparent; background: none; transition: all .15s; font-family: var(--font); }
+    .code-tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+    .code-body { display: none; }
+    .code-body.active { display: block; }
+    pre { padding: 28px; overflow-x: auto; font-size: 13.5px; line-height: 1.7; color: #e2e8f0; background: #0d1117; direction: ltr; text-align: left; font-family: 'Fira Code', 'Courier New', monospace; }
+    .keyword { color: #ff7b72; }
+    .string  { color: #a5d6ff; }
+    .comment { color: #8b949e; font-style: italic; }
+    .func    { color: #d2a8ff; }
+    .var     { color: #ffa657; }
+    .cls     { color: #79c0ff; }
+
+    /* ── Architecture ── */
+    .arch-flow { display: flex; align-items: center; gap: 0; margin-top: 40px; flex-wrap: wrap; }
+    .arch-node { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; text-align: center; min-width: 140px; font-size: 13px; font-weight: 600; }
+    .arch-node .icon { font-size: 24px; margin-bottom: 6px; }
+    .arch-node small { display: block; color: var(--text3); font-size: 11px; font-weight: 400; }
+    .arch-arrow { font-size: 20px; color: var(--brand); padding: 0 8px; flex-shrink: 0; }
+    [lang="ar"] .arch-arrow { transform: scaleX(-1); }
+    .arch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; margin-top: 48px; }
+    .arch-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .arch-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .arch-card ul { list-style: none; font-size: 13px; color: var(--text2); }
+    .arch-card ul li { padding: 3px 0; display: flex; gap: 8px; }
+    .arch-card ul li::before { content: '→'; color: var(--brand); flex-shrink: 0; }
+    [lang="ar"] .arch-card ul li::before { content: '←'; }
+
+    /* ── API Table ── */
+    .api-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 14px; }
+    .api-table th { background: var(--bg2); padding: 12px 16px; text-align: left; font-weight: 600; color: var(--text2); border-bottom: 2px solid var(--border); }
+    [lang="ar"] .api-table th { text-align: right; }
+    .api-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .api-table tr:hover td { background: rgba(255,255,255,.02); }
+    .method { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
+    .m-get  { background: rgba(16,185,129,.15); color: var(--success); }
+    .m-post { background: rgba(59,130,246,.15);  color: var(--info); }
+    .m-any  { background: rgba(139,92,246,.15);  color: #c4b5fd; }
+    .endpoint { font-family: monospace; font-size: 13px; color: var(--text); direction: ltr; display: inline-block; }
+    .auth-badge { display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:rgba(245,158,11,.15);color:var(--warning); }
+    .pub-badge  { display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:rgba(16,185,129,.15);color:var(--success); }
+
+    /* ── DB Schema ── */
+    .schema-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 20px; margin-top: 48px; }
+    .schema-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .schema-card h4 { font-family: monospace; font-size: 15px; color: var(--brand); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); direction: ltr; text-align: left; }
+    .schema-field { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; }
+    .schema-field:last-child { border-bottom: none; }
+    .field-name { font-family: monospace; color: var(--text); direction: ltr; }
+    .field-type { font-family: monospace; font-size: 11px; color: var(--text3); direction: ltr; }
+    .field-pk { color: #fbbf24; }
+    .field-fk { color: #60a5fa; }
+
+    /* ── Commands ── */
+    .cmd-grid { display: grid; gap: 16px; margin-top: 40px; }
+    .cmd-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; }
+    .cmd-card code { font-family: monospace; font-size: 14px; color: var(--brand-light); display: block; margin-bottom: 8px; background: var(--bg3); padding: 10px 14px; border-radius: 8px; direction: ltr; text-align: left; }
+    .cmd-card p { font-size: 13px; color: var(--text2); margin: 0; }
+
+    /* ── Events ── */
+    .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; margin-top: 40px; }
+    .event-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .event-name { font-family: monospace; font-size: 14px; color: var(--brand-light); font-weight: 700; margin-bottom: 6px; direction: ltr; }
+    .event-desc { font-size: 13px; color: var(--text2); }
+    .event-props { margin-top: 10px; }
+    .event-props span { font-family: monospace; font-size: 11px; background: var(--bg3); padding: 2px 6px; border-radius: 4px; color: var(--text3); margin-right: 4px; direction: ltr; display: inline-block; }
+
+    /* ── Install ── */
+    .install-steps { counter-reset: step; margin-top: 40px; }
+    .install-step { counter-increment: step; display: grid; grid-template-columns: 44px 1fr; gap: 20px; margin-bottom: 32px; }
+    .step-num { width: 44px; height: 44px; border-radius: 50%; background: rgba(16,185,129,.15); border: 2px solid var(--brand); color: var(--brand); font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-num::before { content: counter(step); }
+    .step-content h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .step-content p { font-size: 14px; color: var(--text2); margin-bottom: 12px; }
+    .step-content pre { border-radius: 8px; font-size: 13px; }
+
+    /* ── Author ── */
+    .author-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; display: flex; align-items: center; gap: 24px; margin-top: 48px; }
+    .author-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#3b82f6); display: flex; align-items: center; justify-content: center; font-size: 32px; flex-shrink: 0; }
+    .author-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .author-title { font-size: 14px; color: var(--text2); margin-bottom: 12px; }
+    .author-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .author-link { font-size: 13px; padding: 5px 14px; border-radius: 8px; background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+    .author-link:hover { border-color: var(--brand); color: var(--brand); opacity: 1; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--border); padding: 40px; text-align: center; color: var(--text3); font-size: 14px; }
+    footer a { color: var(--text2); } footer a:hover { color: var(--brand); }
+
+    /* ── Divider ── */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 0 40px; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; } .nav-links { display: none; }
+      section { padding: 60px 20px; }
+      .arch-flow { flex-direction: column; }
+      .arch-arrow { transform: rotate(90deg) !important; }
+      .author-card { flex-direction: column; text-align: center; }
+      .author-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<nav>
+  <div class="nav-brand">
+    <div class="logo">💳</div>
+    Payment Engine
+  </div>
+  <div class="nav-links">
+    <a href="#gateways" data-en="Gateways" data-ar="البوابات">Gateways</a>
+    <a href="#features" data-en="Features" data-ar="المميزات">Features</a>
+    <a href="#architecture" data-en="Architecture" data-ar="المعمارية">Architecture</a>
+    <a href="#api" data-en="API" data-ar="API">API</a>
+    <a href="#database" data-en="Database" data-ar="قاعدة البيانات">Database</a>
+    <a href="#install" data-en="Install" data-ar="التثبيت">Install</a>
+    <a href="#author" data-en="Author" data-ar="المطور">Author</a>
+  </div>
+  <div class="nav-cta">
+    <fieldset class="lang-toggle" style="border:none;padding:0;margin:0">
+      <legend style="display:none">Language</legend>
+      <button class="lang-opt active" id="opt-en" onclick="setLang('en')" type="button">EN</button>
+      <button class="lang-opt" id="opt-ar" onclick="setLang('ar')" type="button">عربي</button>
+    </fieldset>
+    <a href="https://github.com/mostafax2/payment-engine" class="btn-nav btn-ghost">GitHub</a>
+    <a href="#install" class="btn-nav btn-primary" data-en="Get Started" data-ar="ابدأ الآن">Get Started</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<div class="hero">
+  <div class="hero-badge" data-en="⚡ v2.0.0 — Enterprise Edition" data-ar="⚡ الإصدار 2.0.0 — نسخة المؤسسات">⚡ v2.0.0 — Enterprise Edition</div>
+  <h1>
+    <span data-en="Enterprise Payment" data-ar="منصة الدفع">Enterprise Payment</span><br>
+    <span data-en="Orchestration Platform" data-ar="المؤسسية المتكاملة" style="background:linear-gradient(135deg,#34d399,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Orchestration Platform</span>
+  </h1>
+  <p data-en="Multi-gateway payments, immutable transaction ledger, webhook reliability, auto-reconciliation, and recovery engine — all in one Laravel package."
+     data-ar="دفع متعدد البوابات، سجل معاملات غير قابل للتعديل، موثوقية الـ Webhook، مصالحة تلقائية ومحرك استرداد — كل ذلك في حزمة Laravel واحدة.">
+    Multi-gateway payments, immutable transaction ledger, webhook reliability, auto-reconciliation, and recovery engine — all in one Laravel package.
+  </p>
+  <div class="hero-cta">
+    <a href="#install" class="btn-hero-primary" data-en="Quick Install →" data-ar="تثبيت سريع ←">Quick Install →</a>
+    <a href="https://github.com/mostafax2/payment-engine" class="btn-hero-secondary" data-en="View on GitHub" data-ar="عرض على GitHub">View on GitHub</a>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">6</div><div class="stat-label" data-en="Payment Gateways" data-ar="بوابات دفع">Payment Gateways</div></div>
+  <div class="stat"><div class="stat-num">6</div><div class="stat-label" data-en="Database Tables" data-ar="جداول قاعدة البيانات">Database Tables</div></div>
+  <div class="stat"><div class="stat-num">6</div><div class="stat-label" data-en="Laravel Events" data-ar="أحداث Laravel">Laravel Events</div></div>
+  <div class="stat"><div class="stat-num">10+</div><div class="stat-label" data-en="API Endpoints" data-ar="نقاط API">API Endpoints</div></div>
+  <div class="stat"><div class="stat-num">5x</div><div class="stat-label" data-en="Webhook Retry Tiers" data-ar="مستويات إعادة المحاولة">Webhook Retry Tiers</div></div>
+  <div class="stat"><div class="stat-num">v2.0</div><div class="stat-label" data-en="Current Version" data-ar="الإصدار الحالي">Current Version</div></div>
+</div>
+
+<!-- ══════════════════════ GATEWAYS ══════════════════════ -->
+<section id="gateways">
+  <div class="section-badge" data-en="Multi-Gateway" data-ar="متعدد البوابات">Multi-Gateway</div>
+  <h2 class="section-title" data-en="6 Payment Gateways — One Interface" data-ar="6 بوابات دفع — واجهة واحدة">6 Payment Gateways — One Interface</h2>
+  <p class="section-sub" data-en="Driver-based architecture using the Strategy Pattern. Add new gateways by implementing PaymentDriverInterface — zero changes to core code."
+     data-ar="معمارية قائمة على الـ Driver باستخدام نمط Strategy. أضف بوابات جديدة بتطبيق PaymentDriverInterface فقط — بدون أي تغيير في الكود الأساسي.">
+    Driver-based architecture using the Strategy Pattern. Add new gateways by implementing <code>PaymentDriverInterface</code> — zero changes to core code.
+  </p>
+  <div class="gateway-grid">
+    <div class="gateway-card">
+      <div class="gateway-icon">🇰🇼</div>
+      <div class="gateway-name">KNET</div>
+      <div class="gateway-region" data-en="Kuwait / Gulf" data-ar="الكويت / الخليج">Kuwait / Gulf</div>
+      <span class="badge-live" data-en="✓ Full Support" data-ar="✓ دعم كامل">✓ Full Support</span>
+    </div>
+    <div class="gateway-card">
+      <div class="gateway-icon">🌍</div>
+      <div class="gateway-name">MyFatoorah</div>
+      <div class="gateway-region" data-en="Gulf & MENA" data-ar="الخليج والشرق الأوسط">Gulf & MENA</div>
+      <span class="badge-live" data-en="✓ Full Support" data-ar="✓ دعم كامل">✓ Full Support</span>
+    </div>
+    <div class="gateway-card">
+      <div class="gateway-icon">💠</div>
+      <div class="gateway-name">Tap Payments</div>
+      <div class="gateway-region" data-en="MENA" data-ar="الشرق الأوسط وشمال أفريقيا">MENA</div>
+      <span class="badge-live" data-en="✓ Full Support" data-ar="✓ دعم كامل">✓ Full Support</span>
+    </div>
+    <div class="gateway-card">
+      <div class="gateway-icon">🔷</div>
+      <div class="gateway-name">PayTabs</div>
+      <div class="gateway-region" data-en="MENA / Global" data-ar="الشرق الأوسط / عالمي">MENA / Global</div>
+      <span class="badge-live" data-en="✓ Full Support" data-ar="✓ دعم كامل">✓ Full Support</span>
+    </div>
+    <div class="gateway-card">
+      <div class="gateway-icon">🟣</div>
+      <div class="gateway-name">Stripe</div>
+      <div class="gateway-region" data-en="Global" data-ar="عالمي">Global</div>
+      <span class="badge-live" data-en="✓ Full Support" data-ar="✓ دعم كامل">✓ Full Support</span>
+    </div>
+    <div class="gateway-card">
+      <div class="gateway-icon">🔵</div>
+      <div class="gateway-name">PayPal</div>
+      <div class="gateway-region" data-en="Global" data-ar="عالمي">Global</div>
+      <span class="badge-live" data-en="✓ Full Support" data-ar="✓ دعم كامل">✓ Full Support</span>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ FEATURES ══════════════════════ -->
+<section id="features">
+  <div class="section-badge" data-en="Core Features" data-ar="المميزات الأساسية">Core Features</div>
+  <h2 class="section-title" data-en="Enterprise-Grade Reliability" data-ar="موثوقية على مستوى المؤسسات">Enterprise-Grade Reliability</h2>
+  <p class="section-sub" data-en="Built for high transaction volume, financial traceability, and production environments that can't afford data loss."
+     data-ar="مبني لحجم معاملات ضخم، وتتبع مالي دقيق، وبيئات إنتاج لا تتحمل فقدان البيانات.">
+    Built for high transaction volume, financial traceability, and production environments that can't afford data loss.
+  </p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📒</div>
+      <div class="feature-title" data-en="Immutable Transaction Ledger" data-ar="سجل معاملات غير قابل للتغيير">Immutable Transaction Ledger</div>
+      <div class="feature-desc" data-en="Every payment is recorded in pe_transactions with a ULID and full audit trail in pe_transaction_events. Status changes are append-only — nothing is ever deleted."
+           data-ar="كل دفعة مسجلة في pe_transactions بـ ULID وسجل تدقيق كامل في pe_transaction_events. تغييرات الحالة تُضاف فقط — لا شيء يُحذف أبداً.">
+        Every payment is recorded in <code>pe_transactions</code> with a ULID and full audit trail in <code>pe_transaction_events</code>. Status changes are append-only — nothing is ever deleted.
+      </div>
+      <div class="feature-tags"><span class="tag">ULID</span><span class="tag">Append-Only</span><span class="tag">Multi-Tenant</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🪝</div>
+      <div class="feature-title" data-en="Webhook Reliability Layer" data-ar="طبقة موثوقية الـ Webhook">Webhook Reliability Layer</div>
+      <div class="feature-desc" data-en="Raw webhook payloads are persisted before processing. Idempotency prevents duplicates. Failed webhooks retry with exponential backoff (1m→5m→15m→1h→24h) before moving to Dead Letter Queue."
+           data-ar="حفظ الـ Webhook الخام قبل المعالجة. الـ Idempotency يمنع التكرار. المحاولات الفاشلة تُعاد بأسلوب exponential backoff (1د→5د→15د→1س→24س) قبل الانتقال إلى Dead Letter Queue.">
+        Raw webhook payloads are persisted before processing. Idempotency prevents duplicates. Failed webhooks retry with exponential backoff (1m→5m→15m→1h→24h) before moving to Dead Letter Queue.
+      </div>
+      <div class="feature-tags"><span class="tag">Idempotency</span><span class="tag">DLQ</span><span class="tag">5-Tier Retry</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚖️</div>
+      <div class="feature-title" data-en="Reconciliation Engine" data-ar="محرك المصالحة">Reconciliation Engine</div>
+      <div class="feature-desc" data-en="Automated comparison of gateway transactions vs internal records. Detects missing payments, amount mismatches (±0.01 tolerance), status inconsistencies."
+           data-ar="مقارنة تلقائية لمعاملات البوابة مقابل السجلات الداخلية. يكشف المدفوعات المفقودة، فوارق المبالغ (±0.01 تسامح)، وتعارضات الحالة.">
+        Automated comparison of gateway transactions vs internal records. Detects missing payments, amount mismatches (±0.01 tolerance), status inconsistencies.
+      </div>
+      <div class="feature-tags"><span class="tag">Amount Tolerance</span><span class="tag">Status Check</span><span class="tag">Gap Detection</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title" data-en="Auto-Recovery Engine" data-ar="محرك الاسترداد التلقائي">Auto-Recovery Engine</div>
+      <div class="feature-desc" data-en="Scans for stale pending transactions older than N minutes, queries the gateway directly, and auto-heals inconsistencies. PaymentRecovered event fired on success."
+           data-ar="يفحص المعاملات المعلقة القديمة (أكبر من N دقيقة)، يستفسر من البوابة مباشرة، ويصحح التناقضات تلقائياً. حدث PaymentRecovered يُطلق عند النجاح.">
+        Scans for stale pending transactions older than N minutes, queries the gateway directly, and auto-heals inconsistencies. <code>PaymentRecovered</code> event fired on success.
+      </div>
+      <div class="feature-tags"><span class="tag">Stale Detection</span><span class="tag">Gateway Inquiry</span><span class="tag">Auto-Heal</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📥</div>
+      <div class="feature-title" data-en="Historical Backfill Engine" data-ar="محرك الاستيراد التاريخي">Historical Backfill Engine</div>
+      <div class="feature-desc" data-en="Sync full date ranges or only missing transactions from any gateway. Essential after downtime or migration. payment:sync --missing fills gaps without duplicates."
+           data-ar="مزامنة نطاقات تاريخية كاملة أو المعاملات الناقصة فقط من أي بوابة. ضروري بعد الانقطاعات أو الترحيل. payment:sync --missing يملأ الفجوات بدون تكرار.">
+        Sync full date ranges or only missing transactions from any gateway. Essential after downtime, system migration, or partial sync failures.
+      </div>
+      <div class="feature-tags"><span class="tag">Full Sync</span><span class="tag">Gap-Fill</span><span class="tag">Date Range</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title" data-en="Event-Driven Architecture" data-ar="معمارية قائمة على الأحداث">Event-Driven Architecture</div>
+      <div class="feature-desc" data-en="6 domain events fire at every lifecycle stage. Listen to PaymentCaptured to update your orders, PaymentRecovered for notifications, PaymentReconciled for reporting hooks."
+           data-ar="6 أحداث نطاق تُطلق في كل مرحلة من دورة الحياة. اسمع على PaymentCaptured لتحديث الطلبات، PaymentRecovered للإشعارات، PaymentReconciled لتشغيل التقارير.">
+        6 domain events fire at every lifecycle stage. Listen to <code>PaymentCaptured</code> to update your orders, <code>PaymentRecovered</code> for notifications.
+      </div>
+      <div class="feature-tags"><span class="tag">6 Events</span><span class="tag">Decoupled</span><span class="tag">Zero Side Effects</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏢</div>
+      <div class="feature-title" data-en="Multi-Tenant Support" data-ar="دعم تعدد المستأجرين">Multi-Tenant Support</div>
+      <div class="feature-desc" data-en="Every transaction and reconciliation report carries a tenant_id. Configure a tenant_resolver callable in config to automatically scope all operations per tenant."
+           data-ar="كل معاملة وتقرير مصالحة يحمل tenant_id. قم بإعداد tenant_resolver callable في الإعدادات لتحديد نطاق جميع العمليات تلقائياً لكل مستأجر.">
+        Every transaction and reconciliation report carries a <code>tenant_id</code>. Configure a <code>tenant_resolver</code> callable in config to automatically scope all operations per tenant.
+      </div>
+      <div class="feature-tags"><span class="tag">tenant_id</span><span class="tag">Scoped Queries</span><span class="tag">SaaS-Ready</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title" data-en="Security by Design" data-ar="أمان بالتصميم">Security by Design</div>
+      <div class="feature-desc" data-en="Sanctum-protected API, Stripe webhook HMAC-SHA256 verification, immutable raw payload storage, no credentials in logs. All PHP files enforce declare(strict_types=1)."
+           data-ar="API محمية بـ Sanctum، التحقق من Webhook لـ Stripe بـ HMAC-SHA256، تخزين غير قابل للتعديل للـ payload الخام، لا بيانات اعتماد في السجلات. جميع ملفات PHP تفرض strict_types=1.">
+        Sanctum-protected API, Stripe webhook HMAC-SHA256 verification, immutable raw payload storage, no credentials in logs. All PHP files enforce <code>declare(strict_types=1)</code>.
+      </div>
+      <div class="feature-tags"><span class="tag">Sanctum</span><span class="tag">HMAC Sig</span><span class="tag">Strict Types</span></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧩</div>
+      <div class="feature-title" data-en="SOLID Architecture" data-ar="معمارية SOLID">SOLID Architecture</div>
+      <div class="feature-desc" data-en="PaymentDriverInterface, TransactionRepositoryInterface, ReconciliationInterface, WebhookHandlerInterface. Readonly DTOs. Final services. Every dependency is injected and mockable."
+           data-ar="PaymentDriverInterface، TransactionRepositoryInterface، ReconciliationInterface، WebhookHandlerInterface. Readonly DTOs. خدمات Final. كل اعتماد مُحقن وقابل للـ mock في الاختبارات.">
+        <code>PaymentDriverInterface</code>, <code>TransactionRepositoryInterface</code>, <code>ReconciliationInterface</code>. Readonly DTOs. Final services. Every dependency is injected and mockable.
+      </div>
+      <div class="feature-tags"><span class="tag">Interfaces</span><span class="tag">readonly DTOs</span><span class="tag">DI</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ ARCHITECTURE ══════════════════════ -->
+<section id="architecture">
+  <div class="section-badge" data-en="Architecture" data-ar="المعمارية">Architecture</div>
+  <h2 class="section-title" data-en="Payment Lifecycle Flow" data-ar="دورة حياة الدفع">Payment Lifecycle Flow</h2>
+  <p class="section-sub" data-en="Every payment follows a deterministic, traceable path through the system."
+     data-ar="كل دفعة تتبع مساراً محدداً وقابلاً للتتبع عبر النظام.">
+    Every payment follows a deterministic, traceable path through the system.
+  </p>
+  <div class="arch-flow">
+    <div class="arch-node"><div class="icon">📱</div><span data-en="Your App" data-ar="تطبيقك">Your App</span><small>InitiatePaymentDTO</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">🎯</div>PaymentManager<small>initiate()</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">💾</div><span data-en="Transaction Ledger" data-ar="سجل المعاملات">Transaction Ledger</span><small>pe_transactions</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">🌐</div><span data-en="Gateway Driver" data-ar="درايفر البوابة">Gateway Driver</span><small>initiate()</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">↩️</div><span data-en="Redirect URL" data-ar="رابط التوجيه">Redirect URL</span><small data-en="User pays" data-ar="المستخدم يدفع">User pays</small></div>
+  </div>
+  <div class="arch-flow" style="margin-top:24px">
+    <div class="arch-node"><div class="icon">📬</div><span data-en="Callback / Webhook" data-ar="Callback / Webhook">Callback / Webhook</span><small data-en="raw payload" data-ar="payload خام">raw payload</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">💾</div>WebhookProcessor<small>persist → queue</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">⚙️</div>ProcessWebhookJob<small data-en="reliable processing" data-ar="معالجة موثوقة">reliable processing</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">✅</div><span data-en="Transaction Updated" data-ar="تم تحديث المعاملة">Transaction Updated</span><small>GatewayResponseDTO</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node"><div class="icon">📣</div><span data-en="Events Fired" data-ar="الأحداث مُطلقة">Events Fired</span><small>PaymentCaptured</small></div>
+  </div>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <h4>📦 <span data-en="Contracts (Interfaces)" data-ar="العقود (Interfaces)">Contracts (Interfaces)</span></h4>
+      <ul>
+        <li>PaymentDriverInterface</li>
+        <li>TransactionRepositoryInterface</li>
+        <li>ReconciliationInterface</li>
+        <li>WebhookHandlerInterface</li>
+      </ul>
+    </div>
+    <div class="arch-card">
+      <h4>🔧 <span data-en="Services" data-ar="الخدمات">Services</span></h4>
+      <ul>
+        <li>PaymentManager</li>
+        <li>WebhookProcessor</li>
+        <li>ReconciliationEngine</li>
+        <li>RecoveryEngine</li>
+        <li>BackfillEngine</li>
+      </ul>
+    </div>
+    <div class="arch-card">
+      <h4>🚌 <span data-en="Queue Jobs" data-ar="وظائف الطابور">Queue Jobs</span></h4>
+      <ul>
+        <li>ProcessWebhookJob</li>
+        <li>ReconcileTransactionsJob</li>
+        <li>RecoverStaleTransactionsJob</li>
+      </ul>
+    </div>
+    <div class="arch-card">
+      <h4>🎲 <span data-en="Design Patterns" data-ar="أنماط التصميم">Design Patterns</span></h4>
+      <ul>
+        <li>Strategy — PaymentDriverInterface</li>
+        <li>Repository — TransactionRepository</li>
+        <li>Adapter — AbstractPaymentDriver</li>
+        <li>DTO — InitiatePaymentDTO</li>
+        <li><span data-en="Event Sourcing — Audit Log" data-ar="Event Sourcing — سجل التدقيق">Event Sourcing — Audit Log</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ CODE EXAMPLES ══════════════════════ -->
+<section id="usage">
+  <div class="section-badge" data-en="Usage" data-ar="الاستخدام">Usage</div>
+  <h2 class="section-title" data-en="Code Examples" data-ar="أمثلة الكود">Code Examples</h2>
+  <p class="section-sub" data-en="Production-ready patterns for the most common use cases."
+     data-ar="أنماط جاهزة للإنتاج لأكثر حالات الاستخدام شيوعاً.">
+    Production-ready patterns for the most common use cases.
+  </p>
+  <div class="code-section">
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="showTab('initiate',this)" type="button" data-en="Initiate Payment" data-ar="بدء الدفع">Initiate Payment</button>
+      <button class="code-tab" onclick="showTab('callback',this)" type="button" data-en="Handle Callback" data-ar="معالجة الـ Callback">Handle Callback</button>
+      <button class="code-tab" onclick="showTab('events',this)" type="button" data-en="Listen to Events" data-ar="الاستماع للأحداث">Listen to Events</button>
+      <button class="code-tab" onclick="showTab('reconcile',this)" type="button" data-en="Reconciliation" data-ar="المصالحة">Reconciliation</button>
+      <button class="code-tab" onclick="showTab('recover',this)" type="button" data-en="Recovery" data-ar="الاسترداد">Recovery</button>
+    </div>
+    <div id="tab-initiate" class="code-body active">
+<pre><span class="keyword">use</span> <span class="cls">Mostafax\PaymentEngine\Facades\PaymentEngine</span>;
+<span class="keyword">use</span> <span class="cls">Mostafax\PaymentEngine\DTOs\InitiatePaymentDTO</span>;
+<span class="keyword">use</span> <span class="cls">Illuminate\Support\Str</span>;
+
+<span class="comment">// ① Build DTO — typed, immutable, no raw env() calls</span>
+<span class="var">$dto</span> = <span class="cls">InitiatePaymentDTO</span>::<span class="func">fromArray</span>([
+    <span class="string">'gateway'</span>     => <span class="string">'knet'</span>,
+    <span class="string">'track_id'</span>    => (<span class="keyword">string</span>) <span class="cls">Str</span>::<span class="func">ulid</span>(),
+    <span class="string">'amount'</span>      => 25.500,
+    <span class="string">'currency'</span>    => <span class="string">'KWD'</span>,
+    <span class="string">'success_url'</span> => <span class="func">route</span>(<span class="string">'payment.return'</span>),
+    <span class="string">'error_url'</span>   => <span class="func">route</span>(<span class="string">'payment.cancel'</span>),
+    <span class="string">'metadata'</span>    => [<span class="string">'order_id'</span> => <span class="var">$order</span>->id],
+]);
+
+<span class="comment">// ② Initiate — saves Transaction, gets redirect URL</span>
+<span class="var">$result</span> = <span class="cls">PaymentEngine</span>::<span class="func">initiate</span>(<span class="var">$dto</span>);
+
+<span class="comment">// ③ Redirect user to gateway</span>
+<span class="keyword">return</span> <span class="func">redirect</span>(<span class="var">$result</span>[<span class="string">'redirect_url'</span>]);</pre>
+    </div>
+    <div id="tab-callback" class="code-body">
+<pre><span class="keyword">use</span> <span class="cls">Mostafax\PaymentEngine\Facades\PaymentEngine</span>;
+
+<span class="comment">// Handles decryption, DB update, event firing automatically</span>
+<span class="var">$transaction</span> = <span class="cls">PaymentEngine</span>::<span class="func">handleCallback</span>(
+    gateway: <span class="string">'knet'</span>,
+    payload: <span class="var">$request</span>-><span class="func">all</span>(),
+);
+
+<span class="keyword">if</span> (<span class="var">$transaction</span>-><span class="func">isCaptured</span>()) {
+    <span class="comment">// fulfill order, send receipt...</span>
+}
+
+<span class="comment">// Live status inquiry from gateway</span>
+<span class="var">$response</span> = <span class="cls">PaymentEngine</span>::<span class="func">inquire</span>(
+    trackId: <span class="var">$trackId</span>,
+    gateway: <span class="string">'knet'</span>,
+    amount:  25.500,
+);
+<span class="comment">// → GatewayResponseDTO (status, amount, auth, ref...)</span></pre>
+    </div>
+    <div id="tab-events" class="code-body">
+<pre><span class="comment">// In EventServiceProvider::boot()</span>
+
+<span class="cls">Event</span>::<span class="func">listen</span>(<span class="cls">PaymentCaptured</span>::<span class="keyword">class</span>, <span class="keyword">function</span>(<span class="cls">PaymentCaptured</span> <span class="var">$event</span>) {
+    <span class="cls">Order</span>::<span class="func">find</span>(<span class="var">$event</span>->transaction->metadata[<span class="string">'order_id'</span>])
+        ?-><span class="func">markAsPaid</span>(amount: <span class="var">$event</span>->transaction->amount);
+});
+
+<span class="cls">Event</span>::<span class="func">listen</span>(<span class="cls">PaymentRecovered</span>::<span class="keyword">class</span>, <span class="keyword">function</span>(<span class="cls">PaymentRecovered</span> <span class="var">$event</span>) {
+    <span class="comment">// Auto-recovery happened — notify admin</span>
+    <span class="cls">Notification</span>::<span class="func">route</span>(<span class="string">'mail'</span>, <span class="func">config</span>(<span class="string">'payment-engine.monitoring.mail_to'</span>))
+        -><span class="func">notify</span>(<span class="keyword">new</span> <span class="cls">PaymentRecoveredNotification</span>(<span class="var">$event</span>->transaction));
+});
+
+<span class="cls">Event</span>::<span class="func">listen</span>(<span class="cls">PaymentReconciled</span>::<span class="keyword">class</span>, <span class="keyword">function</span>(<span class="cls">PaymentReconciled</span> <span class="var">$event</span>) {
+    <span class="keyword">if</span> (<span class="var">$event</span>->report-><span class="func">hasMismatches</span>()) {
+        <span class="comment">// Send Slack / Telegram alert</span>
+    }
+});</pre>
+    </div>
+    <div id="tab-reconcile" class="code-body">
+<pre><span class="keyword">use</span> <span class="cls">Mostafax\PaymentEngine\Services\ReconciliationEngine</span>;
+
+<span class="comment">// Synchronous reconciliation</span>
+<span class="var">$result</span> = <span class="func">app</span>(<span class="cls">ReconciliationEngine</span>::<span class="keyword">class</span>)-><span class="func">run</span>(
+    gateway: <span class="string">'knet'</span>,
+    from:    <span class="string">'2026-06-01'</span>,
+    to:      <span class="string">'2026-06-10'</span>,
+);
+
+<span class="comment">// $result->missingInInternal  — on gateway, missing locally
+// $result->amountMismatch      — differs by more than ±0.01
+// $result->statusMismatch      — captured on gateway, failed locally</span>
+
+<span class="comment">// Artisan</span>
+<span class="comment">// php artisan payment:reconcile knet --from=2026-06-01 --to=2026-06-10
+// php artisan payment:reconcile knet --async</span></pre>
+    </div>
+    <div id="tab-recover" class="code-body">
+<pre><span class="keyword">use</span> <span class="cls">Mostafax\PaymentEngine\Services\RecoveryEngine</span>;
+<span class="keyword">use</span> <span class="cls">Mostafax\PaymentEngine\Services\BackfillEngine</span>;
+
+<span class="comment">// Scan & recover stale pending transactions (> 30 min old)</span>
+<span class="var">$stats</span> = <span class="func">app</span>(<span class="cls">RecoveryEngine</span>::<span class="keyword">class</span>)-><span class="func">recoverStale</span>(
+    olderThanMinutes: 30,
+    maxPerRun: 1000,
+);
+<span class="comment">// ['total' => 42, 'recovered' => 39, 'still_pending' => 3]</span>
+
+<span class="comment">// Backfill missing transactions from gateway</span>
+<span class="var">$stats</span> = <span class="func">app</span>(<span class="cls">BackfillEngine</span>::<span class="keyword">class</span>)-><span class="func">syncMissing</span>(
+    gateway: <span class="string">'knet'</span>,
+    from: <span class="string">'2026-01-01'</span>,
+    to:   <span class="string">'2026-01-31'</span>,
+);
+<span class="comment">// ['missing' => 7, 'created' => 7, 'errors' => 0]</span>
+
+<span class="comment">// Artisan
+// php artisan payment:recover --minutes=30 --max=1000
+// php artisan payment:sync knet --missing --from=2026-01-01 --to=2026-01-31</span></pre>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ API ══════════════════════ -->
+<section id="api">
+  <div class="section-badge">REST API</div>
+  <h2 class="section-title" data-en="API Endpoints" data-ar="نقاط الـ API">API Endpoints</h2>
+  <p class="section-sub" data-en="All endpoints require Laravel Sanctum Bearer Token except webhook receivers."
+     data-ar="جميع نقاط الـ API تتطلب Sanctum Bearer Token ما عدا مستقبلات الـ Webhook.">
+    All endpoints require Laravel Sanctum Bearer Token except webhook receivers.
+  </p>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th data-en="Method" data-ar="الطريقة">Method</th>
+        <th data-en="Endpoint" data-ar="المسار">Endpoint</th>
+        <th data-en="Description" data-ar="الوصف">Description</th>
+        <th data-en="Auth" data-ar="المصادقة">Auth</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/payment/initiate</td><td data-en="Initiate payment, returns redirect URL" data-ar="بدء الدفع، يُعيد رابط التوجيه">Initiate payment, returns redirect URL</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/payment/transactions</td><td data-en="Paginated list (filter by gateway, status, date)" data-ar="قائمة مرقّمة (فلترة بالبوابة والحالة والتاريخ)">Paginated list (filter by gateway, status, date)</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/payment/transactions/{ulid}</td><td data-en="Single transaction with full audit trail" data-ar="معاملة واحدة مع سجل التدقيق الكامل">Single transaction with full audit trail</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/payment/inquire/{trackId}</td><td data-en="Live gateway status check" data-ar="فحص الحالة المباشر من البوابة">Live gateway status check</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/payment/reconcile</td><td data-en="Trigger reconciliation (sync or async)" data-ar="تشغيل المصالحة (متزامن أو غير متزامن)">Trigger reconciliation (sync or async)</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/payment/reconciliation/reports</td><td data-en="Paginated reconciliation reports" data-ar="تقارير المصالحة المرقّمة">Paginated reconciliation reports</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/payment/reconciliation/reports/{ulid}</td><td data-en="Report with mismatch items" data-ar="تقرير مع بنود التعارضات">Report with mismatch items</td><td><span class="auth-badge">Sanctum</span></td></tr>
+      <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/payment/webhook/{gateway}</td><td data-en="Receive push webhooks (Stripe, PayPal, Tap...)" data-ar="استقبال Webhooks المباشرة (Stripe، PayPal، Tap...)">Receive push webhooks</td><td><span class="pub-badge" data-en="Sig Verified" data-ar="توقيع موثّق">Sig Verified</span></td></tr>
+      <tr><td><span class="method m-any">ANY</span></td><td class="endpoint">/payment/{gateway}/success</td><td data-en="KNET / PayTabs success redirect" data-ar="إعادة توجيه نجاح KNET / PayTabs">KNET / PayTabs success redirect</td><td><span class="pub-badge" data-en="Open" data-ar="مفتوح">Open</span></td></tr>
+      <tr><td><span class="method m-any">ANY</span></td><td class="endpoint">/payment/{gateway}/error</td><td data-en="KNET / PayTabs error redirect" data-ar="إعادة توجيه خطأ KNET / PayTabs">KNET / PayTabs error redirect</td><td><span class="pub-badge" data-en="Open" data-ar="مفتوح">Open</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ DATABASE ══════════════════════ -->
+<section id="database">
+  <div class="section-badge" data-en="Database" data-ar="قاعدة البيانات">Database</div>
+  <h2 class="section-title" data-en="6-Table Schema" data-ar="6 جداول قاعدة بيانات">6-Table Schema</h2>
+  <p class="section-sub" data-en="All tables use the pe_ prefix. Names are configurable via config('payment-engine.tables')."
+     data-ar="جميع الجداول تستخدم بادئة pe_. الأسماء قابلة للتخصيص عبر config('payment-engine.tables').">
+    All tables use the <code>pe_</code> prefix. Names are configurable via <code>config('payment-engine.tables')</code>.
+  </p>
+  <div class="schema-grid">
+    <div class="schema-card">
+      <h4>pe_transactions</h4>
+      <div class="schema-field"><span class="field-name field-pk">id, ulid</span><span class="field-type">PK / unique</span></div>
+      <div class="schema-field"><span class="field-name">tenant_id</span><span class="field-type">string, nullable</span></div>
+      <div class="schema-field"><span class="field-name">gateway</span><span class="field-type">string(50)</span></div>
+      <div class="schema-field"><span class="field-name">track_id</span><span class="field-type">unique</span></div>
+      <div class="schema-field"><span class="field-name">amount, currency</span><span class="field-type">decimal(15,3), char(3)</span></div>
+      <div class="schema-field"><span class="field-name">status</span><span class="field-type">string(30)</span></div>
+      <div class="schema-field"><span class="field-name">gateway_response, metadata</span><span class="field-type">json</span></div>
+      <div class="schema-field"><span class="field-name">initiated_at, captured_at, failed_at</span><span class="field-type">timestamp</span></div>
+    </div>
+    <div class="schema-card">
+      <h4>pe_transaction_events</h4>
+      <div class="schema-field"><span class="field-name field-pk">id</span><span class="field-type">PK</span></div>
+      <div class="schema-field"><span class="field-name field-fk">transaction_id</span><span class="field-type">FK</span></div>
+      <div class="schema-field"><span class="field-name">event_type</span><span class="field-type">string(60)</span></div>
+      <div class="schema-field"><span class="field-name">from_status, to_status</span><span class="field-type">string, nullable</span></div>
+      <div class="schema-field"><span class="field-name">actor</span><span class="field-type">string(60)</span></div>
+      <div class="schema-field"><span class="field-name">payload</span><span class="field-type">json, nullable</span></div>
+      <div class="schema-field"><span class="field-name">created_at</span><span class="field-type">timestamp (no updated_at)</span></div>
+    </div>
+    <div class="schema-card">
+      <h4>pe_webhook_payloads</h4>
+      <div class="schema-field"><span class="field-name field-pk">id, ulid</span><span class="field-type">PK / unique</span></div>
+      <div class="schema-field"><span class="field-name">gateway</span><span class="field-type">string(50)</span></div>
+      <div class="schema-field"><span class="field-name">raw_body</span><span class="field-type">longText (immutable)</span></div>
+      <div class="schema-field"><span class="field-name">idempotency_key</span><span class="field-type">unique</span></div>
+      <div class="schema-field"><span class="field-name">signature_verified</span><span class="field-type">boolean</span></div>
+      <div class="schema-field"><span class="field-name">processing_status</span><span class="field-type">string(30)</span></div>
+      <div class="schema-field"><span class="field-name">attempt_count, next_retry_at</span><span class="field-type">tinyint / timestamp</span></div>
+    </div>
+    <div class="schema-card">
+      <h4>pe_webhook_attempts</h4>
+      <div class="schema-field"><span class="field-name field-pk">id</span><span class="field-type">PK</span></div>
+      <div class="schema-field"><span class="field-name field-fk">webhook_payload_id</span><span class="field-type">FK</span></div>
+      <div class="schema-field"><span class="field-name">attempt_number</span><span class="field-type">tinyint</span></div>
+      <div class="schema-field"><span class="field-name">success</span><span class="field-type">boolean</span></div>
+      <div class="schema-field"><span class="field-name">exception_message</span><span class="field-type">text, nullable</span></div>
+      <div class="schema-field"><span class="field-name">exception_trace</span><span class="field-type">longText, nullable</span></div>
+    </div>
+    <div class="schema-card">
+      <h4>pe_reconciliation_reports</h4>
+      <div class="schema-field"><span class="field-name field-pk">id, ulid</span><span class="field-type">PK / unique</span></div>
+      <div class="schema-field"><span class="field-name">gateway, tenant_id</span><span class="field-type">string</span></div>
+      <div class="schema-field"><span class="field-name">period_from, period_to</span><span class="field-type">date</span></div>
+      <div class="schema-field"><span class="field-name">matched_count, missing_in_internal</span><span class="field-type">unsignedInt</span></div>
+      <div class="schema-field"><span class="field-name">amount_mismatch_count</span><span class="field-type">unsignedInt</span></div>
+      <div class="schema-field"><span class="field-name">status</span><span class="field-type">string(20)</span></div>
+    </div>
+    <div class="schema-card">
+      <h4>pe_reconciliation_items</h4>
+      <div class="schema-field"><span class="field-name field-pk">id</span><span class="field-type">PK</span></div>
+      <div class="schema-field"><span class="field-name field-fk">report_id</span><span class="field-type">FK</span></div>
+      <div class="schema-field"><span class="field-name">issue_type</span><span class="field-type">missing | amount_mismatch | status_mismatch</span></div>
+      <div class="schema-field"><span class="field-name">gateway_amount / internal_amount</span><span class="field-type">decimal(15,3)</span></div>
+      <div class="schema-field"><span class="field-name">gateway_status / internal_status</span><span class="field-type">string</span></div>
+      <div class="schema-field"><span class="field-name">auto_recovered, recovered_at</span><span class="field-type">boolean / timestamp</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ EVENTS ══════════════════════ -->
+<section id="events">
+  <div class="section-badge" data-en="Events" data-ar="الأحداث">Events</div>
+  <h2 class="section-title" data-en="6 Domain Events" data-ar="6 أحداث نطاق">6 Domain Events</h2>
+  <p class="section-sub" data-en="Listen to payment lifecycle events in your EventServiceProvider to decouple business logic from payment processing."
+     data-ar="اسمع على أحداث دورة حياة الدفع في EventServiceProvider لفصل منطق الأعمال عن معالجة الدفع.">
+    Listen to payment lifecycle events in your EventServiceProvider to decouple business logic from payment processing.
+  </p>
+  <div class="events-grid">
+    <div class="event-card">
+      <div class="event-name">PaymentInitiated</div>
+      <div class="event-desc" data-en="Fired when a new payment record is created and gateway redirect URL is generated."
+           data-ar="يُطلق عند إنشاء سجل دفع جديد وتوليد رابط توجيه البوابة.">
+        Fired when a new payment record is created and gateway redirect URL is generated.
+      </div>
+      <div class="event-props"><span>$transaction</span><span>$dto</span></div>
+    </div>
+    <div class="event-card">
+      <div class="event-name">PaymentCaptured</div>
+      <div class="event-desc" data-en="Fired when gateway confirms successful capture. Use to fulfill orders, send receipts."
+           data-ar="يُطلق عند تأكيد البوابة لنجاح الالتقاط. استخدمه لتنفيذ الطلبات وإرسال الإيصالات.">
+        Fired when gateway confirms successful capture. Use to fulfill orders, send receipts.
+      </div>
+      <div class="event-props"><span>$transaction</span><span>$response</span></div>
+    </div>
+    <div class="event-card">
+      <div class="event-name">PaymentFailed</div>
+      <div class="event-desc" data-en="Fired when payment is cancelled or declined. Use for retry prompts or logging."
+           data-ar="يُطلق عند إلغاء أو رفض الدفعة. استخدمه لإعادة المحاولة أو التسجيل.">
+        Fired when payment is cancelled or declined. Use for retry prompts or logging.
+      </div>
+      <div class="event-props"><span>$transaction</span><span>$response</span></div>
+    </div>
+    <div class="event-card">
+      <div class="event-name">PaymentRefunded</div>
+      <div class="event-desc" data-en="Fired on successful refund. Carries amount and reason for downstream processing."
+           data-ar="يُطلق عند نجاح الاسترداد. يحمل المبلغ والسبب للمعالجة اللاحقة.">
+        Fired on successful refund. Carries amount and reason for downstream processing.
+      </div>
+      <div class="event-props"><span>$transaction</span><span>$amount</span><span>$reason</span></div>
+    </div>
+    <div class="event-card">
+      <div class="event-name">PaymentRecovered</div>
+      <div class="event-desc" data-en="Fired by RecoveryEngine when a stale pending transaction is successfully resolved via gateway inquiry."
+           data-ar="يُطلق بواسطة RecoveryEngine عند حل معاملة معلقة قديمة بنجاح عبر الاستعلام من البوابة.">
+        Fired by RecoveryEngine when a stale pending transaction is successfully resolved via gateway inquiry.
+      </div>
+      <div class="event-props"><span>$transaction</span><span>$response</span></div>
+    </div>
+    <div class="event-card">
+      <div class="event-name">PaymentReconciled</div>
+      <div class="event-desc" data-en="Fired on reconciliation completion. Check $report->hasMismatches() to trigger alerts."
+           data-ar="يُطلق عند اكتمال المصالحة. تحقق من hasMismatches() لتشغيل التنبيهات.">
+        Fired on reconciliation completion. Check <code>$report->hasMismatches()</code> to trigger alerts.
+      </div>
+      <div class="event-props"><span>$report</span><span>$result</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ COMMANDS ══════════════════════ -->
+<section id="commands">
+  <div class="section-badge" data-en="Artisan" data-ar="أوامر Artisan">Artisan</div>
+  <h2 class="section-title" data-en="Artisan Commands" data-ar="أوامر Artisan">Artisan Commands</h2>
+  <div class="cmd-grid">
+    <div class="cmd-card">
+      <code>php artisan payment:sync knet</code>
+      <p data-en="Full sync of all KNET transactions today from gateway to local database."
+         data-ar="مزامنة كاملة لجميع معاملات KNET اليوم من البوابة إلى قاعدة البيانات المحلية.">Full sync of all KNET transactions today from gateway to local database.</p>
+    </div>
+    <div class="cmd-card">
+      <code>php artisan payment:sync knet --from=2026-01-01 --to=2026-01-31</code>
+      <p data-en="Sync all KNET transactions in January 2026. Essential for historical backfill."
+         data-ar="مزامنة جميع معاملات KNET في يناير 2026. ضروري للاستيراد التاريخي.">Sync all KNET transactions in a date range. Essential for historical backfill.</p>
+    </div>
+    <div class="cmd-card">
+      <code>php artisan payment:sync knet --missing</code>
+      <p data-en="Only create records missing locally. Safe to re-run — skips existing records."
+         data-ar="ينشئ السجلات الناقصة محلياً فقط. آمن لإعادة التشغيل — يتجاهل السجلات الموجودة.">Only create records missing locally. Safe to re-run — skips existing records.</p>
+    </div>
+    <div class="cmd-card">
+      <code>php artisan payment:reconcile knet --from=2026-06-01 --to=2026-06-10</code>
+      <p data-en="Run synchronous reconciliation and print results table with mismatch counts."
+         data-ar="تشغيل مصالحة متزامنة وطباعة جدول النتائج مع عدد التعارضات.">Run synchronous reconciliation and print results table with mismatch counts.</p>
+    </div>
+    <div class="cmd-card">
+      <code>php artisan payment:reconcile knet --async</code>
+      <p data-en="Dispatch reconciliation as a background job on the payment-reconcile queue."
+         data-ar="إرسال المصالحة كوظيفة خلفية على طابور payment-reconcile.">Dispatch reconciliation as a background job on the <code>payment-reconcile</code> queue.</p>
+    </div>
+    <div class="cmd-card">
+      <code>php artisan payment:recover --minutes=30 --max=1000</code>
+      <p data-en="Scan and recover stale pending transactions older than 30 minutes, up to 1000 per run."
+         data-ar="فحص واسترداد المعاملات المعلقة القديمة (أكثر من 30 دقيقة)، حتى 1000 معاملة لكل تشغيل.">Scan and recover stale pending transactions older than 30 minutes, up to 1000 per run.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ INSTALL ══════════════════════ -->
+<section id="install">
+  <div class="section-badge" data-en="Installation" data-ar="التثبيت">Installation</div>
+  <h2 class="section-title" data-en="Get Started in 5 Steps" data-ar="ابدأ في 5 خطوات">Get Started in 5 Steps</h2>
+  <div class="install-steps">
+    <div class="install-step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4 data-en="Require the Package" data-ar="تثبيت الحزمة">Require the Package</h4>
+        <p data-en="Add to your Laravel application via Composer." data-ar="أضفها إلى تطبيق Laravel الخاص بك عبر Composer.">Add to your Laravel application via Composer.</p>
+        <pre>composer require mostafax/payment-engine</pre>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4 data-en="Publish Config & Run Migrations" data-ar="نشر الإعدادات وتشغيل الـ Migrations">Publish Config & Run Migrations</h4>
+        <p data-en="Publish the config file and run the 6 database migrations." data-ar="انشر ملف الإعدادات وشغّل الـ 6 migrations.">Publish the config file and run the 6 database migrations.</p>
+        <pre>php artisan vendor:publish --tag=payment-engine-config
+php artisan migrate</pre>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4 data-en="Configure .env" data-ar="إعداد ملف .env">Configure .env</h4>
+        <p data-en="Add your gateway credentials. Only configure the gateways you use." data-ar="أضف بيانات اعتماد البوابات. قم بإعداد البوابات التي تستخدمها فقط.">Add your gateway credentials. Only configure the gateways you use.</p>
+        <pre>PAYMENT_GATEWAY=knet
+KNET_TRANSPORT_ID=your_transport_id
+KNET_TRANSPORT_PASSWORD=your_password
+KNET_RESOURCE_KEY=your_resource_key
+KNET_SUCCESS_URL=https://yourapp.com/payment/knet/success
+KNET_ERROR_URL=https://yourapp.com/payment/knet/error
+KNET_SANDBOX=true</pre>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4 data-en="Exclude Callbacks from CSRF" data-ar="استثناء الـ Callbacks من CSRF">Exclude Callbacks from CSRF</h4>
+        <p data-en="Add gateway callback URLs to VerifyCsrfToken." data-ar="أضف روابط callback البوابة إلى VerifyCsrfToken.">Add gateway callback URLs to <code>VerifyCsrfToken</code>.</p>
+        <pre>protected $except = [
+    'payment/*/success',
+    'payment/*/error',
+    'api/payment/webhook/*',
+];</pre>
+      </div>
+    </div>
+    <div class="install-step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4 data-en="Start Queue Workers" data-ar="تشغيل عمال الطابور">Start Queue Workers</h4>
+        <p data-en="Run dedicated workers for each queue in production using Supervisor." data-ar="شغّل عمال مخصصين لكل طابور في الإنتاج باستخدام Supervisor.">Run dedicated workers for each queue in production using Supervisor.</p>
+        <pre>php artisan queue:work --queue=payment-webhooks
+php artisan queue:work --queue=payment-reconcile
+php artisan queue:work --queue=payment-recovery</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════ AUTHOR ══════════════════════ -->
+<section id="author">
+  <div class="section-badge" data-en="Author" data-ar="المطور">Author</div>
+  <h2 class="section-title" data-en="Built by Mostafa Elbayyar" data-ar="مبني بواسطة مصطفى البيار">Built by Mostafa Elbayyar</h2>
+  <div class="author-card">
+    <div class="author-avatar">👨‍💻</div>
+    <div>
+      <div class="author-name">Mostafa Elbayyar</div>
+      <div class="author-title" data-en="Senior Software Engineer & Laravel Package Author" data-ar="مهندس برمجيات أول ومطور حزم Laravel">Senior Software Engineer & Laravel Package Author</div>
+      <div class="author-links">
+        <a href="https://github.com/mostafax2" class="author-link">🐙 GitHub @mostafax2</a>
+        <a href="mailto:mostafa.m.elbiar2@gmail.com" class="author-link">✉️ mostafa.m.elbiar2@gmail.com</a>
+        <a href="https://packagist.org/packages/mostafax/" class="author-link">📦 Packagist</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer>
+  <p style="font-size:16px;font-weight:700;margin-bottom:8px;">mostafax/payment-engine</p>
+  <p data-en="Enterprise Payment Orchestration Platform for Laravel — MIT License"
+     data-ar="منصة الدفع المؤسسية لـ Laravel — رخصة MIT">
+    Enterprise Payment Orchestration Platform for Laravel — <a href="https://github.com/mostafax2/payment-engine">GitHub</a> · MIT License
+  </p>
+  <p style="margin-top:8px;color:var(--text3);">
+    <span data-en="Built by" data-ar="مبني بواسطة">Built by</span>
+    <a href="https://github.com/mostafax2">Mostafa Elbayyar</a>
+  </p>
+</footer>
+
+<script>
+  let currentLang = 'en';
+
+  function setLang(lang) {
+    currentLang = lang;
+    applyLang(lang);
+  }
+
+  function applyLang(lang) {
+    const html = document.documentElement;
+    html.setAttribute('lang', lang);
+    html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+    document.getElementById('opt-en').classList.toggle('active', lang === 'en');
+    document.getElementById('opt-ar').classList.toggle('active', lang === 'ar');
+
+    document.querySelectorAll('[data-en][data-ar]').forEach(el => {
+      const val = lang === 'ar' ? el.dataset.ar : el.dataset.en;
+      if (val) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = val;
+        } else if (!el.querySelector('code') && !el.querySelector('pre')) {
+          el.textContent = val;
+        } else {
+          el.innerHTML = val;
+        }
+      }
+    });
+
+    try {
+      localStorage.setItem('pe-lang', lang);
+    } catch (storageError) {
+      console.warn('localStorage unavailable:', storageError);
+    }
+  }
+
+  // Restore saved preference
+  try {
+    const saved = localStorage.getItem('pe-lang');
+    if (saved && saved !== 'en') { currentLang = saved; applyLang(saved); }
+  } catch (storageError) {
+    console.warn('localStorage unavailable:', storageError);
+  }
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.code-body').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+</script>
+</body>
+</html>
