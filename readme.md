@@ -58,20 +58,28 @@
 
 ## Installation
 
-### 1. Require via Composer
+### Option A — One Command (Recommended)
 
 ```bash
 composer require mostafax/payment-engine
+php artisan payment:install
 ```
 
-### 2. Publish Config & Migrate
+`payment:install` automatically:
+- Publishes `config/payment-engine.php`
+- Runs the 6 database migrations
+- Patches CSRF exclusions in `VerifyCsrfToken.php` (Laravel 10) or `bootstrap/app.php` (Laravel 11+)
+- Appends `.env` stubs for gateway credentials
+
+### Option B — Manual
 
 ```bash
+composer require mostafax/payment-engine
 php artisan vendor:publish --tag=payment-engine-config
 php artisan migrate
 ```
 
-### 3. Configure `.env`
+### Configure `.env`
 
 ```env
 # Default gateway

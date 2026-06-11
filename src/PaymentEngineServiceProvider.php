@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mostafax\PaymentEngine;
 
 use Illuminate\Support\ServiceProvider;
+use Mostafax\PaymentEngine\Console\Commands\InstallCommand;
 use Mostafax\PaymentEngine\Console\Commands\ReconcileCommand;
 use Mostafax\PaymentEngine\Console\Commands\RecoverMissingCommand;
 use Mostafax\PaymentEngine\Console\Commands\SyncPaymentsCommand;
@@ -59,6 +60,7 @@ final class PaymentEngineServiceProvider extends ServiceProvider
             ], 'payment-engine-views');
 
             $this->commands([
+                InstallCommand::class,
                 SyncPaymentsCommand::class,
                 ReconcileCommand::class,
                 RecoverMissingCommand::class,
