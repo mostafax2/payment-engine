@@ -12,6 +12,7 @@ enum GatewayType: string
     case PayTabs    = 'paytabs';
     case Stripe     = 'stripe';
     case PayPal     = 'paypal';
+    case Fawry      = 'fawry';
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum GatewayType: string
             self::PayTabs    => 'PayTabs',
             self::Stripe     => 'Stripe',
             self::PayPal     => 'PayPal',
+            self::Fawry      => 'Fawry (Egypt)',
         };
     }
 }

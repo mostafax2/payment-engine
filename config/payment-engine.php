@@ -110,6 +110,17 @@ return [
             'currency'      => env('PAYPAL_CURRENCY', 'USD'),
         ],
 
+        'fawry' => [
+            'driver'           => \Mostafax\PaymentEngine\Drivers\FawryDriver::class,
+            'label'            => 'Fawry (Egypt)',
+            'merchant_code'    => env('FAWRY_MERCHANT_CODE'),
+            'secure_key'       => env('FAWRY_SECURE_KEY'),
+            'return_url'       => env('FAWRY_RETURN_URL'),
+            'verify_signature' => env('FAWRY_VERIFY_SIGNATURE', true),
+            'sandbox'          => env('FAWRY_SANDBOX', true),
+            'currency'         => 'EGP',
+        ],
+
     ],
 
     /*

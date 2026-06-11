@@ -12,6 +12,8 @@ final class InstallCommand extends Command
     protected $signature   = 'payment:install {--force : Overwrite existing published config}';
     protected $description = 'Install Payment Engine — publish config, run migrations, configure CSRF exclusions';
 
+    private const CSRF_LABEL = self::CSRF_LABEL;
+
     public function handle(): int
     {
         $this->components->info('Installing Payment Engine v' . $this->packageVersion() . '...');
@@ -61,7 +63,7 @@ final class InstallCommand extends Command
         $contents = File::get($path);
 
         if (str_contains($contents, 'payment/*/success')) {
-            $this->components->twoColumnDetail('CSRF exclusions', '<fg=yellow>already present — skipped</>');
+            $this->components->twoColumnDetail(self::CSRF_LABEL, '<fg=yellow>already present — skipped</>');
             return;
         }
 
@@ -83,13 +85,13 @@ final class InstallCommand extends Command
         $contents = File::get($path);
 
         if (str_contains($contents, 'payment/*/success')) {
-            $this->components->twoColumnDetail('CSRF exclusions', '<fg=yellow>already present — skipped</>');
+            $this->components->twoColumnDetail(self::CSRF_LABEL, '<fg=yellow>already present — skipped</>');
             return;
         }
 
         // Only patch if ->withMiddleware() block exists; otherwise show manual instructions
         if (! str_contains($contents, '->withMiddleware(')) {
-            $this->components->twoColumnDetail('CSRF exclusions', '<fg=red>withMiddleware() not found — add manually</>');
+            $this->components->twoColumnDetail(self::CSRF_LABEL, '<fg=red>withMiddleware() not found — add manually</>');
             $this->showBootstrapManualInstructions();
             return;
         }
@@ -136,26 +138,32 @@ PHP;
             return;
         }
 
-        $env = File::get($envPath);
+        $envContents = File::get($envPath);
 
-        if (str_contains($env, 'PAYMENT_GATEWAY')) {
+        if (str_contains($envContents, 'PAYMENT_GATEWAY')) {
             return;
         }
 
-        $this->components->task('Adding .env stubs', function () use ($envPath, $env) {
+        $this->components->task('Adding .env stubs', function () use ($envPath) {
             $stub = <<<'ENV'
 
 
 # ── Payment Engine ──────────────────────────────────
 PAYMENT_GATEWAY=knet
 
-# KNET
+# KNET (Kuwait)
 KNET_TRANSPORT_ID=
 KNET_TRANSPORT_PASSWORD=
 KNET_RESOURCE_KEY=
 KNET_SUCCESS_URL="${APP_URL}/payment/knet/success"
 KNET_ERROR_URL="${APP_URL}/payment/knet/error"
 KNET_SANDBOX=true
+
+# Fawry (Egypt) — optional
+# FAWRY_MERCHANT_CODE=
+# FAWRY_SECURE_KEY=
+# FAWRY_RETURN_URL="${APP_URL}/payment/fawry/success"
+# FAWRY_SANDBOX=true
 
 # Stripe (optional)
 # STRIPE_SECRET_KEY=sk_test_...

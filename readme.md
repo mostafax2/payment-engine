@@ -21,14 +21,15 @@
 
 ## Supported Gateways
 
-| Gateway      | Region       | Status          |
-|--------------|--------------|-----------------|
-| KNET         | Kuwait/Gulf  | ✅ Full Support  |
-| MyFatoorah   | Gulf & MENA  | ✅ Full Support  |
-| Tap Payments | MENA         | ✅ Full Support  |
-| PayTabs      | MENA/Global  | ✅ Full Support  |
-| Stripe       | Global       | ✅ Full Support  |
-| PayPal       | Global       | ✅ Full Support  |
+| Gateway      | Region        | Status          |
+|--------------|---------------|-----------------|
+| KNET         | Kuwait/Gulf   | ✅ Full Support  |
+| MyFatoorah   | Gulf & MENA   | ✅ Full Support  |
+| Tap Payments | MENA          | ✅ Full Support  |
+| PayTabs      | MENA/Global   | ✅ Full Support  |
+| Stripe       | Global        | ✅ Full Support  |
+| PayPal       | Global        | ✅ Full Support  |
+| Fawry        | Egypt / MENA  | ✅ Full Support  |
 
 ---
 
