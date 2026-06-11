@@ -14,7 +14,7 @@
 `mostafax/payment-engine` transforms any Laravel application into a full payment orchestration platform. It provides a unified driver interface across **6 payment gateways**, an immutable transaction ledger, a webhook reliability layer with Dead Letter Queue, automated reconciliation, stale-transaction recovery, and historical backfill — all event-driven and multi-tenant ready.
 
 **Author:** [Mostafa Elbayyar](https://github.com/mostafax2)  
-**Documentation:** [GitHub Pages](https://mostafax2.github.io/payment-engine/)  
+**Documentation:** [https://mostafax2.github.io/payment-engine/](https://mostafax2.github.io/payment-engine/)  
 **Support:** mostafa.m.elbiar2@gmail.com
 
 ---
