@@ -228,5 +228,7 @@ All notable changes adhere to [Semantic Versioning](https://semver.org/spec/v2.0
    return redirect($result['redirect_url']);
    ```
 
+[2.1.1]: https://github.com/mostafax2/payment-engine/releases/tag/v2.1.1
+[2.1.0]: https://github.com/mostafax2/payment-engine/releases/tag/v2.1.0
 [2.0.0]: https://github.com/mostafax2/payment-engine/releases/tag/v2.0.0
 [1.0.0]: https://github.com/mostafax2/payment-engine/releases/tag/v1.0.0
